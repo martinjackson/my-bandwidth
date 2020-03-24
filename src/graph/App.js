@@ -3,9 +3,9 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import useCSV from './useCSV'
 import MyChart from './MyChart'
 
-const meg = (s) => {
-  const m = parseFloat(s) / 1000000.0
-  return Math.round( m * 10 ) / 10;
+const mem = (s) => {
+  const m = parseFloat(s) / 1000.0      // in k units not meg
+  return m;    // Math.round( m * 100 ) / 100;
 }
 
 const buildGraphData = (data) => {
@@ -24,8 +24,8 @@ const buildGraphData = (data) => {
 
   data = data.slice(start,end)   // remove header and last entry if a blank line
 
-  const down = data.map( (v, i) => [ new Date(v[TIME]), meg(v[DOWNLOAD]) ] )
-  const up   = data.map( (v, i) => [ new Date(v[TIME]), meg(v[UPLOAD])   ] )
+  const down = data.map( (v, i) => [ new Date(v[TIME]), mem(v[DOWNLOAD]) ] )
+  const up   = data.map( (v, i) => [ new Date(v[TIME]), mem(v[UPLOAD])   ] )
 
   return [
             {
