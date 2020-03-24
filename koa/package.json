@@ -1,0 +1,20 @@
+{
+  "name": "simple-koa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "simple.js",
+  "scripts": {
+    "start": "node server.js --port 8000 --home ../public"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "argparse": "^1.0.10",
+    "koa": "^2.11.0",
+    "koa-helmet": "^5.2.0",
+    "koa-static": "^5.0.0",
+    "mime": "^2.4.4"
+  },
+  "devDependencies": {
+  }
+}
