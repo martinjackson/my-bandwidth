@@ -3,10 +3,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import useCSV from './useCSV'
 import MyChart from './MyChart'
 
-const mem = (s) => {
-  const m = parseFloat(s) / 1000.0      // in k units not meg
-  return m;    // Math.round( m * 100 ) / 100;
-}
+const mem = (s) => ( parseFloat(s) / 1000.0 )   // in k units not meg
 
 const buildGraphData = (data) => {
 
@@ -47,6 +44,8 @@ const App = () => {
 
   useLayoutEffect(() => {
     if (targetRef.current) {
+      console.log('setting dim');
+
       setDimensions({
         width: targetRef.current.offsetWidth,
         height: targetRef.current.offsetHeight
@@ -62,12 +61,8 @@ const App = () => {
     setGraphData(gDat)
   }, [data]);
 
-
   if (status !== "Complete" || graphData === null)
     return <span>{status}</span>            // report Loading... or error
-
-    console.log('App render:', graphData);
-
 
   return (
     <div ref={targetRef}>
