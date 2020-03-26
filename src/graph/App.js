@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import useCSV from './useCSV'
 import MyChart from './MyChart'
@@ -24,10 +24,17 @@ const buildGraphData = (data) => {
   const down = data.map( (v, i) => [ new Date(v[TIME]), mem(v[DOWNLOAD]) ] )
   const up   = data.map( (v, i) => [ new Date(v[TIME]), mem(v[UPLOAD])   ] )
 
+  const downGood = down.filter( (v) => v[1] >= 9000)
+  const downSlow = down.filter( (v) => v[1] < 9000)
+
   return [
             {
-              label: 'Download',
-              data: down
+              label: 'Download Good',
+              data: downGood
+            },
+            {
+              label: 'Download Slow',
+              data: downSlow
             },
             {
               label: 'Upload',
@@ -38,20 +45,6 @@ const buildGraphData = (data) => {
 
 
 const App = () => {
-
-  const targetRef = useRef();
-  const [dimensions, setDimensions] = useState({ width:0, height: 0 });
-
-  useLayoutEffect(() => {
-    if (targetRef.current) {
-      console.log('setting dim');
-
-      setDimensions({
-        width: targetRef.current.offsetWidth,
-        height: targetRef.current.offsetHeight
-      });
-    }
-  }, []);
 
   const [status, data] = useCSV("./speedtest-cli.csv");
   const [graphData, setGraphData] = useState(null);
@@ -64,10 +57,17 @@ const App = () => {
   if (status !== "Complete" || graphData === null)
     return <span>{status}</span>            // report Loading... or error
 
+  const counts = graphData.map( d => d.data.length )
+  const total = Math.max(...counts)
+  console.log('counts:', counts, 'Total:', total);
+
+  const percent = (n, d) => ( (100*n/d).toFixed(1)+'%' )
+  const stats = graphData.map( (d,i) => (<p key={i}>{d.label}: {d.data.length} {percent(d.data.length, total)} </p>) )
+
   return (
-    <div ref={targetRef}>
-      <p>{dimensions.width} x {dimensions.height}</p>
-      <MyChart data={graphData} dim={dimensions} />
+    <div>
+      {stats}
+      <MyChart data={graphData} />
     </div>
   );
 }
