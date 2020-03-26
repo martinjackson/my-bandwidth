@@ -7,11 +7,13 @@ export const buildGraphData = (data) => {
   const TIME = 3;
   const DOWNLOAD = 6;
   const UPLOAD = 7;
+
   let start = 1;
   let end = data.length - 1;
   if (data[end].length < 10)
     end--;
   data = data.slice(start, end); // remove header and last entry if a blank line
+
   const down = data.map((v, i) => [new Date(v[TIME]), mem(v[DOWNLOAD])]);
   const up = data.map((v, i) => [new Date(v[TIME]), mem(v[UPLOAD])]);
   const downGood = down.filter((v) => v[1] >= 9000);
