@@ -16,23 +16,52 @@ export const buildGraphData = (data) => {
 
   const down = data.map((v, i) => [new Date(v[TIME]), mem(v[DOWNLOAD])]);
   const up = data.map((v, i) => [new Date(v[TIME]), mem(v[UPLOAD])]);
-  const downGood = down.filter((v) => v[1] >= 9000);
-  const downSlow = down.filter((v) => v[1] < 9000);
+
+  const cutOverDate = new Date("2020-03-26T15:30:01.719551Z");
+
+  const downGood10 = down.filter((v) => v[1] >= 9000 && v[0] < cutOverDate);
+  const downSlow10 = down.filter((v) => v[1] < 9000 && v[0] < cutOverDate);
+  const up10 = up.filter((v) => v[0] < cutOverDate);
+
+  const downGood20 = down.filter((v) => v[1] >= 19000 && v[0] >= cutOverDate);
+  const downSlow20 = down.filter((v) => v[1] < 19000 && v[0] >= cutOverDate);
+  const up20 = up.filter((v) => v[0] > cutOverDate);
+
 
   const grData = [
     {
-      label: 'Download Good',
-      data: downGood
+      label: 'Download Good 10Mps',
+      data: downGood10,
+      totalCount: downGood10.length + downSlow10.length
     },
     {
-      label: 'Download Slow',
-      data: downSlow
+      label: 'Download Slow 10Mps',
+      data: downSlow10,
+      totalCount: downGood10.length + downSlow10.length
     },
     {
-      label: 'Upload',
-      data: up
+      label: 'Upload 1Mps',
+      data: up10,
+      totalCount: up10.length
+    },
+
+    {
+      label: 'Download Good 20Mps',
+      data: downGood20,
+      totalCount: downGood20.length + downSlow20.length
+    },
+    {
+      label: 'Download Slow 20Mps',
+      data: downSlow20,
+      totalCount: downGood20.length + downSlow20.length
+    },
+    {
+      label: 'Upload 2Mps',
+      data: up20,
+      totalCount: up20.length
     }
+
   ];
 
-  return [grData, end-start]
+  return grData;
 };

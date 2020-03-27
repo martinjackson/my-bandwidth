@@ -9,12 +9,10 @@ const App = () => {
 
   const [status, data] = useCSV("./speedtest-cli.csv");
   const [graphData, setGraphData] = useState(null);
-  const [sampleSize, setSampleSize] = useState(null);
 
   useEffect(() => {
-    const [gDat, sampleSize] = buildGraphData(data)
+    const gDat = buildGraphData(data)
     setGraphData(gDat)
-    setSampleSize(sampleSize)
   }, [data]);
 
   if (status !== "Complete" || graphData === null)
@@ -22,7 +20,7 @@ const App = () => {
 
   return (
     <div>
-      <Stats data={graphData} total={sampleSize}/>
+      <Stats data={graphData} />
       <MyChart data={graphData} />
     </div>
   );
